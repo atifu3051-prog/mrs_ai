@@ -18,20 +18,22 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '11'
 
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
 
-    - name: Get dependencies
+    - name: Clean and Get Dependencies
       run: |
-        flutter create . --platforms=android || true
+        flutter clean
         flutter pub get
 
-    - name: Force Debug Build Bypass
-      run: flutter build apk --debug
+    - name: Force Build APK Without Validation
+      run: |
+        cd android
+        ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxPermSize=512m" || cd .. && flutter build apk --debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
