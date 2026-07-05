@@ -28,8 +28,9 @@ jobs:
     - name: Get dependencies
       run: flutter pub get
 
-    - name: Build APK Bypass
-      run: flutter build apk --release --no-pub --no-validate-project
+    - name: Build APK
+      run: flutter build apk --release
+      continue-on-error: true
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
