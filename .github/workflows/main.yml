@@ -25,13 +25,17 @@ jobs:
       with:
         channel: 'stable'
 
-    - name: Build Standard APK
+    - name: Repair and Generate Android Files
       run: |
+        rm -rf android
+        flutter create . --platforms=android
         flutter pub get
-        flutter build apk --debug --split-per-abi
+
+    - name: Build Debug APK
+      run: flutter build apk --debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: mrs-ai-debug-apk
-        path: build/app/outputs/flutter-apk/
+        path: build/app/outputs/flutter-apk/app-debug.apk
