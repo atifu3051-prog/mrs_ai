@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout code
@@ -18,20 +18,22 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '11'
 
-    - name: Set up Flutter
+    - name: Set up Flutter Legacy
       uses: subosito/flutter-action@v2
       with:
+        flutter-version: '3.19.6'
         channel: 'stable'
 
-    - name: Repair and Generate Android Files
+    - name: Clean and Recreate Platform
       run: |
+        flutter clean
         rm -rf android
         flutter create . --platforms=android
         flutter pub get
 
-    - name: Build Debug APK
+    - name: Build Legacy Debug APK
       run: flutter build apk --debug
 
     - name: Upload APK
