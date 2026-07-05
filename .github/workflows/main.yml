@@ -18,25 +18,20 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '11'
+        java-version: '17'
 
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
 
-    - name: Clean and Get Dependencies
+    - name: Build Standard APK
       run: |
-        flutter clean
         flutter pub get
-
-    - name: Force Build APK Without Validation
-      run: |
-        cd android
-        ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxPermSize=512m" || cd .. && flutter build apk --debug
+        flutter build apk --debug --split-per-abi
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: mrs-ai-debug-apk
-        path: build/app/outputs/flutter-apk/app-debug.apk
+        path: build/app/outputs/flutter-apk/
